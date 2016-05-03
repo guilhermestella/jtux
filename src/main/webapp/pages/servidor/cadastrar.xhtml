@@ -1,0 +1,60 @@
+<ui:fragment    xmlns="http://www.w3.org/1999/xhtml"  
+                xmlns:h="http://java.sun.com/jsf/html"  
+                xmlns:f="http://java.sun.com/jsf/core"  
+                xmlns:ui="http://java.sun.com/jsf/facelets"  
+                xmlns:p="http://primefaces.org/ui">  
+
+    <h:outputLabel value="Obs1: Para acessar o servidor via SSH, é preciso que seja liberado o acesso de root nas configurações SSH do Servidor ou que o usuário de login seja incluído no arquivo SUDOERS com privilégios de Root" style="font-weight:bold" />
+    <br />
+    <h:outputLabel value="Obs2: O Repositório de Arquivos deve estabelecer um padrão: C:\\Users\\nome.usuario\\pasta" style="font-weight:bold" />
+    <p:separator/>
+    
+        <h:panelGrid id="panelGridCadastroBean"
+                     columns="2"  cellpadding="5">
+            <h:outputLabel value="Nome:" style="font-weight:bold" />
+            <p:inputText value="#{servidorBean.servidor.nmDescricao}"/>
+            
+            <h:outputLabel value="Usuário SSH:  " style="font-weight:bold" />
+            <p:inputText value="#{servidorBean.servidor.nmUsuarioSsh}"/>
+            
+            <h:outputLabel value="Senha SSH:  " style="font-weight:bold" />
+            <p:inputText value="#{servidorBean.servidor.nmSenhaSsh}"/>
+            
+            <h:outputLabel value="IP: " style="font-weight:bold" />
+            <p:inputText value="#{servidorBean.servidor.nmEnderecoIp}"/>
+            
+            <h:outputLabel value="Porta: " style="font-weight:bold" />
+            <p:inputText value="#{servidorBean.servidor.nrPorta}"/>
+            
+            <h:outputLabel value="Local Backup: " style="font-weight:bold" />
+            <p:inputText value="#{servidorBean.servidor.nmRepositorioArquivos}"/>
+            
+            <h:outputLabel value="Sistema Operacional: " style="font-weight:bold" />
+            <p:selectOneMenu id="selectOneMenuSistemaOperacional"
+                             value="#{servidorBean.servidor.sistemaOperacional}"
+                             converter="entityConverter">
+                <p:ajax event="change"/>
+                <f:selectItems value="#{servidorBean.listSistemaOperacional}"
+                               var="selectSistemaOperacional"
+                               itemValue="#{selectSistemaOperacional}"
+                               itemLabel="#{selectSistemaOperacional.nmDescricao}"/>
+            </p:selectOneMenu>
+            <br/>
+            <p:commandButton actionListener="#{servidorBean.atualizaListaCadastro()}"
+                             immediate="true"
+                             icon="fa fa-refresh"
+                             update="selectOneMenuSistemaOperacional">
+            </p:commandButton>
+
+            <h:outputLabel value="Ativo:" style="font-weight:bold" />
+            <p:selectBooleanCheckbox value="#{moduloBean.modulo.ativo.id}"/>
+
+        </h:panelGrid>   
+        <p:separator />                    
+        <p:commandButton id="btnGravar"
+                         actionListener="#{servidorBean.btnGravar()}" 
+                         ajax="false"  
+                         update="panelGridCadastroBean"
+                         value="Cadastrar"  
+                         icon="ui-icon-disk"/>  
+</ui:fragment>  

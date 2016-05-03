@@ -1,0 +1,59 @@
+<ui:fragment    xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"    
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <p:dataTable id="dataTableBean"
+                 var="arquivoConfiguracao" 
+                 value="#{arquivoConfiguracaoBean.listArquivoConfiguracao}"
+                 paginator="true"
+                 rows="15"
+                 resizableColumns="true">
+
+        <p:column headerText="Id"><h:outputText value="#{arquivoConfiguracao.id}"/></p:column>
+        
+        <p:column headerText="Nome"><h:outputText value="#{arquivoConfiguracao.nmDescricao}"/></p:column>
+        
+        <p:column headerText="Serviço"><h:outputText value="#{arquivoConfiguracao.servico.nmDescricao}"/></p:column>
+        
+        <p:column id="columnNmLocalArquivo"
+                  headerText="Local Arquivo">
+            <p:inputText id="inputNmLocalArquivo" value="#{arquivoConfiguracao.nmLocalArquivo}">
+                <p:ajax event="change"/>
+            </p:inputText>
+        </p:column>
+
+        <!-- Coluna para Ações. Trocar apenas os 2 últimos parâmetros do callSubAcaoMethod -->
+        <p:column id="columnAcoes"
+                  headerText="Ações">
+            <c:forEach items="#{funcionalidade.listAcao}"
+                       var="subAcao">
+                <c:if test="#{!subAcao.tipoAcao.flPrincipal}">
+                    <!-- 
+                        Processo deve atualizar o componente e a tabela
+                        O dataTable deve ser atualizado quando removido um objeto
+                    -->
+                    <p:commandButton id="btnAcao"
+                                     value="#{subAcao.tipoAcao.nmDescricao}"
+                                     icon="#{subAcao.tipoAcao.nmIcone}"
+                                     action="#{segurancaBean.callSubAcaoMethod(subAcao, arquivoConfiguracaoBean.class, arquivoConfiguracao)}"
+                                     process="@this dataTableBean"
+                                     update="dataTableBean">
+                        <p:confirm id="confirmBtnAcao"
+                                   header="Confirmação" 
+                                   message="Tem Certeza que deseja executar esta ação?" 
+                                   icon="ui-icon-alert" />
+                        <p:confirmDialog id="confirmDialogBtnAcao"
+                                         global="true" 
+                                         showEffect="fade" 
+                                         hideEffect="fade">
+                            <p:commandButton id="btnconfirmDialogBtnAcaoSim" value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton id="btnconfirmDialogBtnAcaoNao" value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+                    </p:commandButton>
+                </c:if>
+            </c:forEach>
+        </p:column>
+    </p:dataTable>  
+</ui:fragment>

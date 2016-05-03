@@ -1,0 +1,210 @@
+<ui:fragment    xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"    
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <p:tabView id="tabViewServidor"
+               dynamic="true"
+               orientation="right">
+        <c:forEach items="#{segurancaBean.usuario.listServidor}"
+                   var="servidor">
+            <p:tab title="#{servidor.nmDescricao}">
+                <p:panelGrid id="panelGridConfiguracaoServidor">
+                    <p:column id="columnDadosServidor"
+                              style="width: 60%">
+                        <h:outputLabel value="Servidor: " style="font-weight:bold; font-size: 30px">#{servidor.nmDescricao}</h:outputLabel>
+                        <br />
+                        <h:outputLabel value="Sistema Operacional:  " style="font-weight:bold; font-size: 18px">#{servidor.sistemaOperacional.nmDescricao}</h:outputLabel>
+                        <br />
+                        <h:outputLabel value="IP/Porta:  " style="font-weight:bold; font-size: 18px">#{servidor.nmEnderecoIp}:#{servidor.nrPorta}</h:outputLabel>
+                        <br />
+                        <h:outputLabel value="Usuário Acesso SSH: " style="font-weight:bold; font-size: 18px">#{servidor.nmUsuarioSsh}</h:outputLabel>
+                        <br />
+                        <h:outputLabel value="Senha Acesso SSH: " style="font-weight:bold; font-size: 18px">#{servidor.nmSenhaSsh}</h:outputLabel>
+                        <br />
+                        <h:outputLabel value="Local Backup: " style="font-weight:bold; font-size: 18px">#{servidor.nmRepositorioArquivos}</h:outputLabel>
+                        <br />
+                        <br />
+                        <h:outputLabel value="Testes" style="font-weight:bold; font-size: 22px"/>
+                        <p:separator/>
+                        <p:commandButton value="Testar Conexão" 
+                                         immediate="true" 
+                                         actionListener="#{monitorarServidorBean.btnTestarConexao(servidor)}"/>
+                    </p:column>
+                    <p:column id="columnComandoExecutar"
+                              style="width: 100%">
+                        <h:outputLabel value="Inserir Comando" style="font-weight:bold; font-size: 18px"/>
+                        <br/>
+                        <h:form>
+                        <p:inputTextarea id="inputComandoExecutar"
+                                         placeholder="Digite o Comando aqui..."
+                                         value="#{monitorarServidorBean.comandoExecutar}" 
+                                         rows="7" cols="60" autoResize="true"/>
+                        <p:separator/>
+                        <p:commandButton id="btnComandoExecutar"
+                                         value="Executar Comando do Console" 
+                                         actionListener="#{monitorarServidorBean.btnExecutarComandoConsole(servidor,monitorarServidorBean.comandoExecutar)}">
+                            <p:confirm id="confirmComandoExecutar"
+                                       header="Confirmação" 
+                                       message="Tem certeza que deseja Executar o Comando?" 
+                                       icon="ui-icon-alert" />
+                        </p:commandButton>
+                        </h:form>
+                    </p:column>
+                </p:panelGrid>
+                <br />
+                <br />
+                <p:panel id="panelServico">
+                    <h:outputLabel value="Serviços" style="font-weight:bold; font-size: 22px"/>
+                    <p:tabView id="tabViewServico"
+                               dynamic="true">
+                        <c:forEach items="#{servidor.listServico}"
+                                   var="servico">
+                            <p:tab title="#{servico.nmDescricao}">
+                                <p:panel id="panelArquivoConfiguracao">
+                                    <h:outputLabel value="Arquivos de Configuração" style="font-weight:bold; font-size: 16px"/>
+                                    <p:tabView id="tabViewArquivoConfiguracao"
+                                               dynamic="true">
+                                        <c:forEach items="#{servico.listArquivoConfiguracao}"
+                                                   var="arquivoConfiguracao">
+                                            <p:tab title="#{arquivoConfiguracao.nmDescricao}">
+                                                <p:outputLabel value="Local do Arquivo: " style="font-size: 20px"/>
+                                                <p:inputText value="#{arquivoConfiguracao.nmLocalArquivo}" style="width: 50%" required="true" requiredMessage="Campo não pode ser vazio"/>
+                                                <br />
+                                                <p:separator/>
+                                                <c:forEach items="#{monitorarServidorBean.obterListVariavelArquivo(servidor)}"
+                                                           var="variavelArquivo">
+                                                    <c:if test="#{variavelArquivo.arquivoConfiguracao.id eq arquivoConfiguracao.id}">
+                                                        <c:if test="#{variavelArquivo.servidor.id eq servidor.id}">
+                                                            <p:outputLabel value="#{variavelArquivo.variavelGlobal.dsVariavelGlobal}: " 
+                                                                           style="font-size: 24px; font-weight: bold"/>
+                                                            <br />
+                                                            <p:inputTextarea id="inputNmArquivoConfiguracao"
+                                                                             value="#{variavelArquivo.dsCampo}" 
+                                                                             style="width: 98%"
+                                                                             autoResize="true"
+                                                                             rows="1"/>
+                                                            <br />
+                                                             <p:outputLabel value="(#{variavelArquivo.variavelGlobal.nmDescricao})" 
+                                                                            style="font-size: 14px"/>
+                                                            <br />
+                                                            <br />
+                                                        </c:if>
+                                                    </c:if>
+                                                </c:forEach>
+                                                <p:commandButton id="btnSalvarAlteracoesArquivo"
+                                                                 value="Salvar Alterações Arquivo"
+                                                                 actionListener="#{monitorarServidorBean.btnSalvarAlteracaoArquivoConfiguracao(arquivoConfiguracao)}">
+                                                    <p:confirm id="confirmSalvarAlteracoesArquivo"
+                                                               header="Confirmação" 
+                                                               message="Aplicar Alterações?" 
+                                                               icon="ui-icon-alert" />
+                                                </p:commandButton>
+                                            </p:tab>
+                                        </c:forEach>
+                                    </p:tabView>
+                                </p:panel>
+                                <br />
+                                
+                                
+                                <!-- Configurar Serviço -->
+                                <p:commandButton id="btnInstalarServico"
+                                                 styleClass="GreenButton"
+                                                 value="Instalar Serviço" 
+                                                 immediate="true"
+                                                 actionListener="#{monitorarServidorBean.btnInstalarServico(servidor, servico)}">
+                                    <p:confirm id="confirmInstalarServico"
+                                               header="Confirmação" 
+                                               message="Tem Certeza que deseja Instalar o Serviço?" 
+                                               icon="ui-icon-alert" />
+                                </p:commandButton>
+                                
+                                <!-- Botão Enviar Arquivos de Configuração -->
+                                <p:commandButton id="btnEnviarArquivosConfiguracao"
+                                                 styleClass="RedButton"
+                                                 value="Enviar Arquivos de Configuracao" 
+                                                 immediate="true"
+                                                 actionListener="#{monitorarServidorBean.btnEnviarArquivosConfiguracao(servidor, servico)}">
+                                    <p:confirm id="confirmEnviarArquivosConfiguracao"
+                                               header="Confirmação" 
+                                               message="Tem Certeza que deseja Enviar os Arquivos de Configuração?" 
+                                               icon="ui-icon-alert" />
+                                </p:commandButton>
+                                
+                                <!-- Botão Gerar Arquivos Teste -->
+                                <p:commandButton id="btnGerarArquivosTeste"
+                                                 value="Gerar Arquivos de Teste" 
+                                                 immediate="true"
+                                                 actionListener="#{monitorarServidorBean.btnGerarArquivosTeste(servidor, servico)}">
+                                    <p:confirm id="confirmGerarArquivosTeste"
+                                               header="Confirmação" 
+                                               message="Gerar Arquivos de Teste?" 
+                                               icon="ui-icon-alert" />
+                                </p:commandButton>
+                                
+                                <!-- Botão Start -->
+                                <p:commandButton id="btnStart"
+                                                 styleClass="OrangeButton"
+                                                 value="Start" 
+                                                 immediate="true"
+                                                 actionListener="#{monitorarServidorBean.btnStartServico(servidor, servico)}">
+                                    <p:confirm id="confirmStop"
+                                               header="Confirmação" 
+                                               message="Tem certeza que deseja dar Start no Serviço?"
+                                               icon="ui-icon-alert" />
+                                </p:commandButton>
+
+                                <!-- Botão Stop -->
+                                <p:commandButton id="btnStop"
+                                                 styleClass="GreenButton"
+                                                 value="Stop" 
+                                                 immediate="true"
+                                                 actionListener="#{monitorarServidorBean.btnStopServico(servidor, servico)}">
+                                    <p:confirm id="confirmStop"
+                                               header="Confirmação" 
+                                               message="Tem certeza que deseja dar Stop no Serviço?" 
+                                               icon="ui-icon-alert" />
+                                </p:commandButton>
+                                
+                                <!-- Botão Restart -->
+                                <p:commandButton id="btnRestart"
+                                                 styleClass="PurpleButton"
+                                                 value="Restart" 
+                                                 immediate="true"
+                                                 actionListener="#{monitorarServidorBean.btnRestartServico(servidor, servico)}">
+                                    <p:confirm id="confirmRestart"
+                                               header="Confirmação" 
+                                               message="Tem certeza que deseja dar Restart no Serviço?" 
+                                               icon="ui-icon-alert" />
+                                </p:commandButton>
+                                
+                                <!-- Botão Reload -->
+                                <p:commandButton id="btnReload"
+                                                 value="Reload" 
+                                                 immediate="true"
+                                                 actionListener="#{monitorarServidorBean.btnReloadServico(servidor, servico)}">
+                                    <p:confirm id="confirmReload"
+                                               header="Confirmação" 
+                                               message="Tem certeza que deseja dar Reload no Serviço?" 
+                                               icon="ui-icon-alert" />
+                                </p:commandButton>
+                                
+                                
+                                <!-- Confirm Dialog para todos os Eventos de Confirm existentes na página -->
+                                <p:confirmDialog id="confirmDialogMonitorarServidor"
+                                         global="true" 
+                                         showEffect="fade" 
+                                         hideEffect="fade">
+                                    <p:commandButton id="btnConfirmDialogMonitorarServidorSim" value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                    <p:commandButton id="btnConfirmDialogMonitorarServidorNao" value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                </p:confirmDialog>
+                            </p:tab>
+                        </c:forEach>
+                    </p:tabView>
+                </p:panel>
+            </p:tab>
+        </c:forEach>
+    </p:tabView>
+    
+</ui:fragment>

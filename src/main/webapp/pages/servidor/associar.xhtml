@@ -1,0 +1,64 @@
+<ui:fragment    xmlns="http://www.w3.org/1999/xhtml"  
+                xmlns:h="http://java.sun.com/jsf/html"  
+                xmlns:f="http://java.sun.com/jsf/core"  
+                xmlns:ui="http://java.sun.com/jsf/facelets"  
+                xmlns:p="http://primefaces.org/ui">  
+
+    <h3 style="margin-top: 0">Servidor</h3>
+    <p:panelGrid id="panelGridAssociarServidorServico">
+        <p:column id="columnAssociarServidorServico">
+            <p:selectOneMenu id="selectOneMenuServidor"
+                             value="#{associarServidorServicoBean.servidor}"
+                             converter="entityConverter">
+                <p:ajax event="change" 
+                        update="pickListAssociarServidorServico" 
+                        process="@this pickListAssociarServidorServico"
+                        listener="#{associarServidorServicoBean.gerarAssociacao(associarServidorServicoBean.servidor.listServico)}"/>
+                <f:selectItem itemLabel="Selecione..."/>
+                <f:selectItems value="#{associarServidorServicoBean.listServidor}"
+                               var="selectedItem"
+                               itemValue="#{selectedItem}"
+                               itemLabel="#{selectedItem.nmDescricao}"/>
+            </p:selectOneMenu>
+            <p:commandButton actionListener="#{associarServidorServicoBean.btnAtualizarLista()}"
+                             immediate="true"
+                             icon="fa fa-refresh"
+                             update="selectOneMenuServidor">
+            </p:commandButton>
+            <br/>
+            <br/>
+            <br/>
+            <h3 style="margin-top: 0">Serviços</h3>
+            <p:pickList id="pickListAssociarServidorServico" 
+                        converter="entityConverter"
+                        value="#{associarServidorServicoBean.dual}" 
+                        var="pick" 
+                        itemLabel="#{pick.nmDescricao}" 
+                        itemValue="#{pick}" >
+                <f:facet name="sourceCaption">Disponíveis</f:facet>
+                <f:facet name="targetCaption">Associados</f:facet>
+                <p:ajax event="transfer" />
+            </p:pickList>
+            <br/>
+            <br/>
+            <p:commandButton id="btnAssociar" 
+                             actionListener="#{associarServidorServicoBean.btnAssociar()}"
+                             value="Associar" 
+                             immediate="true" 
+                             process="@this"
+                             style="margin-top:5px">
+                <p:confirm id="confirmBtnAssociar"
+                           header="Confirmação" 
+                           message="Deseja fazer esta Associação?" 
+                           icon="ui-icon-alert" />
+                <p:confirmDialog id="confirmDialogBtnAssociar"
+                                 global="true" 
+                                 showEffect="fade" 
+                                 hideEffect="fade">
+                    <p:commandButton id="btnconfirmDialogBtnAssociarSim" value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton id="btnconfirmDialogBtnAssociarNao" value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+            </p:commandButton>
+        </p:column>
+    </p:panelGrid>
+</ui:fragment>  

@@ -1,0 +1,84 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pr="http://primefaces.org/rio"
+    xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <h:form>
+        <div class="Animated05" id="layout-menu-cover">
+            <ul class="layout-menu">
+                <li>
+                    <a class="menulink ripplelink">
+                        <i class="icon-round58 Fs40"></i>
+                        <span class="Fs18">#{segurancaBean.usuario.nmDescricao}
+                            <i class="icon-downwards Fright Fs20"/>
+                            <br />
+                            <span class="Fs12 FontRobotoLight"></span>
+                        </span>
+                    </a>
+                    <ul>
+                        <li><p:commandLink styleClass="menulink ripplelink" onclick="PF('perfilUsuario').show();"><i class="icon-user158 Fs16"></i> Perfil do UsuÃ¡rio </p:commandLink></li>
+                        <li><p:commandLink styleClass="menulink ripplelink" onclick="PF('infoSistema').show();"><i class="icon-settings49 Fs16"></i> InformaÃ§Ãµes do Sistema </p:commandLink></li>
+                        <li><p:commandLink ajax="false" action="#{segurancaBean.logout()}" styleClass="menulink ripplelink"><i class="icon-locked57 Fs16"></i> Logout </p:commandLink></li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="Separator"></div>
+
+            <pr:menu model="#{segurancaBean.menuModel}"/>
+
+        </div>
+        
+        <p:dialog header="Perfil UsuÃ¡rio" widgetVar="perfilUsuario" modal="true" height="500" width="500">
+            <h:outputText value="Nome: #{segurancaBean.usuario.nmDescricao}" />
+            <p:separator/>
+            <h:outputText value="E-mail: #{segurancaBean.usuario.nmEmail}" />
+            <p:separator/>
+            <h:outputText value="Perfis: " />
+            <br />
+            <c:forEach items="#{segurancaBean.usuario.listPerfil}"
+                       var="perfis">
+                <h:outputText value="#{perfis.nmDescricao}" /><br />
+            </c:forEach>
+            <p:separator/>
+            <h:outputText value="Servidores: " />
+            <br />
+            <c:forEach items="#{segurancaBean.usuario.listServidor}"
+                       var="servidores">
+                <h:outputText value="#{servidores.nmDescricao}" /><br />
+            </c:forEach>
+            
+            
+        </p:dialog>   
+        
+        <p:dialog header="InformaÃ§Ãµes do Sistema" widgetVar="infoSistema" modal="true" height="500" width="800">
+            <h:outputText value="Projeto de ConclusÃ£o de Curso" />
+            <p:separator/>
+            <h:outputText value="Curso: " />
+            <br />
+            <h:outputText value="Engenharia da ComputaÃ§Ã£o"/>
+            <p:separator/>
+            <h:outputText value="Entidade: "/>
+            <br />
+            <h:outputText value="UniSALESIANO - Centro UniversitÃ¡rio CatÃ³lico Salesiano Auxilium" />
+            <p:separator/>
+            <h:outputText value="Alunos: " />
+            <br />
+            <h:outputText value="Guilherme Augusto Stella"/>
+            <br />
+            <h:outputText value="Gustavo Manzali Fernandes"/>
+            <p:separator/>
+            <h:outputText value="Software: " />
+            <br />
+            <h:outputText value="JTux - Uma nova tecnologia Web para gerenciamento de servidores em ambiente Linux"/>
+            <br />
+            <h:outputText value="VersÃ£o: 15.11.18a"/>
+        </p:dialog>  
+        
+        
+    </h:form>
+
+</ui:composition>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<facelet-taglib>
+    <namespace>http://syscon.gtech.com.br/taglibs</namespace>
+    <tag>
+	<tag-name>tabelaPesquisa</tag-name>
+        <source>tags/tabelaPesquisa.xhtml</source>
+	
+        <description><![CDATA[Componente que gera as tabelas de Pesquisa.]]></description>
+        
+        <attribute>
+            <description><![CDATA[Lista de Dados do Bean.]]></description>
+            <name>lista</name>
+            <required>true</required>
+            <type>java.util.List</type>
+        </attribute>
+    </tag>
+    
+    <tag>
+	<tag-name>colunaTextoTabelaPesquisa</tag-name>
+        <source>tags/colunaTextoTabelaPesquisa.xhtml</source>
+	
+        <description><![CDATA[Colunas da Tabela de Pesquisa.]]></description>
+        
+        <attribute>
+            <description><![CDATA[Nome da Coluna.]]></description>
+            <name>nomeColuna</name>
+            <required>true</required>
+            <type>java.util.String</type>
+        </attribute>
+        
+        <attribute>
+            <description><![CDATA[Valor do Campo.]]></description>
+            <name>valorCampo</name>
+            <required>true</required>
+        </attribute>
+    </tag>
+</facelet-taglib>

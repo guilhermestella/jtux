@@ -1,0 +1,120 @@
+<ui:fragment    xmlns="http://www.w3.org/1999/xhtml"  
+                xmlns:h="http://java.sun.com/jsf/html"  
+                xmlns:f="http://java.sun.com/jsf/core"  
+                xmlns:ui="http://java.sun.com/jsf/facelets"  
+                xmlns:p="http://primefaces.org/ui">  
+    <p:panelGrid id="panelGridAssociarUsuarioServidorPerfil">
+        <p:column id="columnPickListUsuarioServidor">
+            <h3 style="margin-top: 0">Usuário</h3>
+            <p:selectOneMenu id="selectOneMenuUsuarioServidor"
+                             value="#{associarUsuarioServidorBean.usuario}"
+                             converter="entityConverter">
+                <p:ajax event="change" 
+                        update="pickListAssociarServidor" 
+                        process="@this pickListAssociarServidor"
+                        listener="#{associarUsuarioServidorBean.gerarAssociacao(associarUsuarioServidorBean.usuario.listServidor)}"/>
+                <f:selectItem itemLabel="Selecione..."/>
+                <f:selectItems value="#{associarUsuarioServidorBean.listUsuario}"
+                               var="selectUsuario"
+                               itemValue="#{selectUsuario}"
+                               itemLabel="#{selectUsuario.nmDescricao}"/>
+            </p:selectOneMenu>
+            <p:commandButton actionListener="#{associarUsuarioServidorBean.btnAtualizarLista()}"
+                             immediate="true"
+                             icon="fa fa-refresh"
+                             update="selectOneMenuUsuarioServidor">
+            </p:commandButton>
+            <br/>
+            <br/>
+            <br/>
+            <h3 style="margin-top: 0">Servidores</h3>
+            <p:pickList id="pickListAssociarServidor" 
+                        converter="entityConverter"
+                        value="#{associarUsuarioServidorBean.dual}" 
+                        var="servidor" 
+                        itemLabel="#{servidor.nmDescricao}" 
+                        itemValue="#{servidor}" >
+                <f:facet name="sourceCaption">Disponíveis</f:facet>
+                <f:facet name="targetCaption">Associados</f:facet>
+                <p:ajax event="transfer" />
+            </p:pickList>
+            <br/>
+            <br/>
+            <p:commandButton id="btnAssociar" 
+                             actionListener="#{associarUsuarioServidorBean.btnAssociar()}"
+                             value="Associar" 
+                             immediate="true" 
+                             process="@this"
+                             style="margin-top:5px">
+                <p:confirm id="confirmBtnAssociar"
+                           header="Confirmação" 
+                           message="Deseja fazer esta Associação?" 
+                           icon="ui-icon-alert" />
+                <p:confirmDialog id="confirmDialogBtnAssociar"
+                                 global="true" 
+                                 showEffect="fade" 
+                                 hideEffect="fade">
+                    <p:commandButton id="btnconfirmDialogBtnAssociarSim" value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton id="btnconfirmDialogBtnAssociarNao" value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+            </p:commandButton>
+        </p:column>
+
+        <p:column id="columnPickListUsuarioPerfil">
+            <h3 style="margin-top: 0">Usuário</h3>
+            <p:selectOneMenu id="selectOneMenuUsuarioPerfil"
+                             value="#{associarUsuarioPerfilBean.usuario}"
+                             converter="entityConverter">
+                <p:ajax event="change" 
+                        update="pickListAssociarPerfil" 
+                        process="@this pickListAssociarPerfil"
+                        listener="#{associarUsuarioPerfilBean.gerarAssociacao(associarUsuarioPerfilBean.usuario.listPerfil)}"/>
+                <f:selectItem itemLabel="Selecione..."/>
+                <f:selectItems value="#{associarUsuarioPerfilBean.listUsuario}"
+                               var="selectUsuario"
+                               itemValue="#{selectUsuario}"
+                               itemLabel="#{selectUsuario.nmDescricao}"/>
+            </p:selectOneMenu>
+            <p:commandButton actionListener="#{associarUsuarioPerfilBean.btnAtualizarLista()}"
+                             immediate="true"
+                             icon="fa fa-refresh"
+                             update="selectOneMenuUsuarioPerfil">
+            </p:commandButton>
+            <br/>
+            <br/>
+            <br/>
+            <h3 style="margin-top: 0">Perfil</h3>
+            <p:pickList id="pickListAssociarPerfil" 
+                        converter="entityConverter"
+                        value="#{associarUsuarioPerfilBean.dual}" 
+                        var="perfil" 
+                        itemLabel="#{perfil.nmDescricao}" 
+                        itemValue="#{perfil}" >
+                <f:facet name="sourceCaption">Disponíveis</f:facet>
+                <f:facet name="targetCaption">Associados</f:facet>
+                <p:ajax  event="transfer" />
+            </p:pickList>
+            <br/>
+            <br/>
+            <p:commandButton id="btnAssociar" 
+                             actionListener="#{associarUsuarioPerfilBean.btnAssociar()}"
+                             value="Associar" 
+                             immediate="true" 
+                             process="@this"
+                             style="margin-top:5px">
+                <p:confirm id="confirmBtnAssociar"
+                           header="Confirmação" 
+                           message="Deseja fazer esta Associação?" 
+                           icon="ui-icon-alert" />
+                <p:confirmDialog id="confirmDialogBtnAssociar"
+                                 global="true" 
+                                 showEffect="fade" 
+                                 hideEffect="fade">
+                    <p:commandButton id="btnconfirmDialogBtnAssociarSim" value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton id="btnconfirmDialogBtnAssociarNao" value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+            </p:commandButton> 
+        </p:column>
+    </p:panelGrid>
+
+</ui:fragment>  

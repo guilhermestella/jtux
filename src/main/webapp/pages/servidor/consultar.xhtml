@@ -1,0 +1,119 @@
+<ui:fragment    xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"    
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <p:dataTable id="dataTableBean"
+                 var="servidor" 
+                 value="#{servidorBean.listServidor}"
+                 paginator="true"
+                 rows="15"
+                 resizableColumns="true">
+
+
+        <p:column headerText="Id" width="1%"><h:outputText value="#{servidor.id}"/></p:column>
+        
+        <p:column id="columnNmDescricao"
+                  headerText="Descrição"
+                  width="10%">
+            <p:inputText id="inputNmDescricao" value="#{servidor.nmDescricao}">
+                <p:ajax event="change"/>
+            </p:inputText>
+        </p:column>
+        
+        <p:column id="columnNmEnderecoIp"
+                  headerText="IP"
+                  width="10%">
+            <p:inputText id="inputNmEnderecoIp" value="#{servidor.nmEnderecoIp}" size="12">
+                <p:ajax event="change"/>
+            </p:inputText>
+        </p:column>
+        
+        <p:column id="columnNrPortaSsh"
+                  headerText="Porta"
+                  width="3%">
+            <p:inputText id="inputNrPortaSsh" value="#{servidor.nrPorta}" size="3">
+                <p:ajax event="change"/>
+            </p:inputText>
+        </p:column>
+        
+        <p:column id="columnNmUsuarioSsh"
+                  headerText="Usuário SSH"
+                  width="8%">
+            <p:inputText id="inputNmUsuarioSsh" value="#{servidor.nmUsuarioSsh}" size="10">
+                <p:ajax event="change"/>
+            </p:inputText>
+        </p:column>
+        
+        <p:column id="columnNmSenhaSsh"
+                  headerText="Senha SSH"
+                  width="8%">
+            <p:inputText id="inputNmSenhaSsh" value="#{servidor.nmSenhaSsh}" size="8">
+                <p:ajax event="change"/>
+            </p:inputText>
+        </p:column>
+        
+        <p:column id="columnNmRepositorioArquivos"
+                  headerText="Local Backup">
+            <p:inputText id="inputNmRepositorioArquivos" value="#{servidor.nmRepositorioArquivos}">
+                <p:ajax event="change"/>
+            </p:inputText>
+        </p:column>
+        
+        <p:column id="columnSistemaOperacional"
+                  headerText="Sistema Operacional"
+                  width="12%">
+            <p:selectOneMenu id="selectOneMenuSistemaOperacional"
+                             value="#{servidor.sistemaOperacional}"
+                             converter="entityConverter">
+                <p:ajax event="change"/>
+                <f:selectItem itemLabel="#{servidor.sistemaOperacional.nmDescricao}"
+                              itemValue="#{servidor.sistemaOperacional}"/>
+                <f:selectItems value="#{servidorBean.listSistemaOperacional}"
+                               var="selectSistemaOperacional"
+                               itemValue="#{selectSistemaOperacional}"
+                               itemLabel="#{selectSistemaOperacional.nmDescricao}"/>
+            </p:selectOneMenu>          
+        </p:column>
+
+        <p:column headerText="Ativo"
+                  width="3%">
+            <p:selectBooleanCheckbox value="#{servidor.ativo.id}">
+                <p:ajax event="change"/>
+            </p:selectBooleanCheckbox>
+        </p:column>
+
+        <!-- Coluna para Ações. Trocar apenas os 2 últimos parâmetros do callSubAcaoMethod -->
+        <p:column id="columnAcoes"
+                  headerText="Ações">
+            <c:forEach items="#{funcionalidade.listAcao}"
+                       var="subAcao">
+                <c:if test="#{!subAcao.tipoAcao.flPrincipal}">
+                    <!-- 
+                        Processo deve atualizar o componente e a tabela
+                        O dataTable deve ser atualizado quando removido um objeto
+                    -->
+                    <p:commandButton id="btnAcao"
+                                     value="#{subAcao.tipoAcao.nmDescricao}"
+                                     icon="#{subAcao.tipoAcao.nmIcone}"
+                                     action="#{segurancaBean.callSubAcaoMethod(subAcao, servidorBean.class, servidor)}"
+                                     process="@this dataTableBean"
+                                     update="dataTableBean">
+                        <p:confirm id="confirmBtnAcao"
+                                   header="Confirmação" 
+                                   message="Tem Certeza que deseja executar esta ação?" 
+                                   icon="ui-icon-alert" />
+                        <p:confirmDialog id="confirmDialogBtnAcao"
+                                         global="true" 
+                                         showEffect="fade" 
+                                         hideEffect="fade">
+                            <p:commandButton id="btnconfirmDialogBtnAcaoSim" value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton id="btnconfirmDialogBtnAcaoNao" value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+                    </p:commandButton>
+                </c:if>
+            </c:forEach>
+        </p:column>
+    </p:dataTable>  
+</ui:fragment>

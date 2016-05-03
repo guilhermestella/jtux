@@ -1,0 +1,18 @@
+<ui:fragment    xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"    
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <p:dataTable id="dataTableBean"
+                 var="dataTableAcao" 
+                 value="#{acaoBean.listAcao}"
+                 paginator="true"
+                 rows="15"
+                 resizableColumns="true">
+        <p:column headerText="Id"><h:outputText value="#{dataTableAcao.id}"/></p:column>
+        <p:column headerText="Funcionalidade"><h:outputText value="#{dataTableAcao.funcionalidade.nmFuncionalidade}"/></p:column>
+        <p:column headerText="Ação"><h:outputText value="#{dataTableAcao.tipoAcao.nmDescricao}"/></p:column>
+        <p:column headerText="Página"><h:outputText value="#{dataTableAcao.nmLink}"/></p:column>
+    </p:dataTable>  
+</ui:fragment>

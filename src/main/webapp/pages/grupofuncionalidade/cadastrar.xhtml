@@ -1,0 +1,38 @@
+<ui:fragment    xmlns="http://www.w3.org/1999/xhtml"  
+                xmlns:h="http://java.sun.com/jsf/html"  
+                xmlns:f="http://java.sun.com/jsf/core"  
+                xmlns:ui="http://java.sun.com/jsf/facelets"  
+                xmlns:p="http://primefaces.org/ui">  
+        <h:panelGrid id="panelGridCadastroBean"
+                     columns="2"  cellpadding="5">
+            <h:outputLabel value="Nome:" style="font-weight:bold" />
+            <p:inputText value="#{grupoFuncionalidadeBean.grupoFuncionalidade.nmDescricao}"/>
+            
+            <h:outputLabel value="Modulo: " style="font-weight:bold" />
+            <p:selectOneMenu id="selectOneMenuModulo"
+                             value="#{grupoFuncionalidadeBean.grupoFuncionalidade.modulo}"
+                             converter="entityConverter">
+                <f:selectItems value="#{grupoFuncionalidadeBean.listModulo}"
+                               var="selectModulo"
+                               itemValue="#{selectModulo}"
+                               itemLabel="#{selectModulo.nmDescricao}"/>
+            </p:selectOneMenu>
+            <br/>
+            <p:commandButton actionListener="#{grupoFuncionalidadeBean.atualizaListaCadastro()}"
+                             immediate="true"
+                             icon="fa fa-refresh"
+                             update="selectOneMenuModulo">
+            </p:commandButton>
+            
+            <h:outputLabel value="Ativo:" style="font-weight:bold" />
+            <p:selectBooleanCheckbox value="#{grupoFuncionalidadeBean.grupoFuncionalidade.ativo.id}"/>
+            
+        </h:panelGrid>   
+        <p:separator />                    
+        <p:commandButton id="btnGravar"
+                         actionListener="#{grupoFuncionalidadeBean.btnGravar()}" 
+                         ajax="false"  
+                         update="panelGridCadastroBean"
+                         value="Cadastrar"  
+                         icon="ui-icon-disk"/>  
+</ui:fragment>  

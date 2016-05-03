@@ -1,0 +1,61 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pr="http://primefaces.org/rio"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <h:form id="formTabFuncionalidade">
+        <!-- O cache fica como true para armazenar os dados da Tab. Eles permanecem mesmo se trocar as tabs -->
+        <p:panel id="panelTabFuncionalidade">
+            <p:tabView id="tabViewTabFuncionalidade"
+                       cache="true"
+                       dynamic="true"
+                       scrollable="true"
+                       activeIndex="#{segurancaBean.controleIndex}">
+                <p:tab id="tabBemVindo" title="Bem-Vindo"/>
+                <c:forEach items="#{segurancaBean.listTabFuncionalidade}"
+                           var="funcionalidade">
+                    <p:tab id="tab#{funcionalidade.id}"
+                           title="#{funcionalidade.nmFuncionalidade}"
+                           closable="false">
+                        <p:panel id="panelAcaoFuncionalidade"
+                                 header="#{funcionalidade.grupoFuncionalidade.modulo.nmDescricao} >> 
+                                         #{funcionalidade.grupoFuncionalidade.nmDescricao} >> 
+                                         #{funcionalidade.nmFuncionalidade}
+                                        (#{funcionalidade.id})" 
+                                 toggleable="true"
+                                 toggleSpeed="500" 
+                                 closeSpeed="500" 
+                                 widgetVar="panel">
+                            <p:tabView id="tabViewAcaoFuncionalidade"
+                                       cache="true">
+                                <c:forEach items="#{funcionalidade.listAcao}"
+                                           var="acao">
+                                    <c:if test="#{acao.tipoAcao.flPrincipal}">
+                                        <p:tab title="#{acao.tipoAcao.nmDescricao}">
+                                            <ui:include src="#{acao.nmLink}"/>
+                                            <c:if test="#{acao.tipoAcao.flPossuiSubAcao}">
+                                            </c:if>
+                                        </p:tab>
+                                    </c:if>
+                                </c:forEach>
+                            </p:tabView>
+                        </p:panel>
+                        <br />
+                        <p:commandButton id="btnFecharTabFuncionalidade"
+                                         value="Fechar" 
+                                         actionListener="#{segurancaBean.removeTabFuncionalidade(funcionalidade.id)}" 
+                                         update=":formTabFuncionalidade:tabViewTabFuncionalidade"
+                                         immediate="true"/>
+                    </p:tab>
+                </c:forEach>
+            </p:tabView>
+        </p:panel>
+    </h:form>
+
+    
+    
+</ui:composition>
